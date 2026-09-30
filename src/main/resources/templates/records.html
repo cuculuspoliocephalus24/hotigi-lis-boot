@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="ja"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>育成記録 - ホトギスラボ</title>
+
+    <style>
+
+        body {
+            font-family: sans-serif;
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .record-card {
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+		.section {
+		    border-top: 1px solid #eeeeee;
+		    margin-top: 18px;
+		    padding-top: 12px;
+		}
+
+		.section h3 {
+		    margin-top: 0;
+		    margin-bottom: 8px;
+		}
+        .equipment {
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .status-box {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            min-width: 150px;
+        }
+
+        ul {
+            margin-top: 5px;
+        }
+
+        .record-meta {
+            color: #555;
+        }
+		.fighter-title h2 {
+		    margin: 12px 0;
+		}
+		.gain-status {
+		    font-size: 22px;
+		    font-weight: bold;
+		}
+
+		.gain-status::before {
+		    content: "+";
+		}
+    </style>
+	<style>
+	    body {
+	        font-family: sans-serif;
+	        max-width: 900px;
+	        margin: 30px auto;
+	        padding: 0 20px;
+	        line-height: 1.7;
+	    }
+
+	    h1, h2, h3 {
+	        margin-top: 24px;
+	    }
+
+	    .record-card {
+	        border: 1px solid #dddddd;
+	        border-radius: 10px;
+	        padding: 20px;
+	        margin: 20px 0;
+	    }
+
+	    .record-section {
+	        border-top: 1px solid #eeeeee;
+	        margin-top: 15px;
+	        padding-top: 10px;
+	    }
+
+	    .back-link {
+	        display: inline-block;
+	        margin-bottom: 20px;
+	    }
+	</style>
+</head>
+
+<body>
+
+    <h1>育成記録</h1>
+
+    <p>
+        <a href="/">新しい育成データを登録</a>
+    </p>
+
+
+    <div
+        class="record-card"
+        th:each="record : ${records}">
+
+        <div class="record-meta">
+
+            記録ID：
+            <span th:text="${record.id}"></span>
+
+            ／ 投稿者：
+            <span th:text="${record.contributorName}"></span>
+
+        </div>
+
+
+		<div class="fighter-title">
+		    <h2>
+		        <span th:text="${record.fighterName}"></span>
+
+		        <span th:if="${record.fighterLevel != null}">
+		            Lv.<span th:text="${record.fighterLevel}"></span>
+		        </span>
+		    </h2>
+		</div>
+
+
+        <div class="section">
+
+            <h3>サポーター</h3>
+			<ol>
+			    <li>
+			        <span th:text="${record.supporter1}"></span>
+			        <span th:if="${record.supporter1Level != null}">
+			            Lv.<span th:text="${record.supporter1Level}"></span>
+			        </span>
+			    </li>
+
+			    <li>
+			        <span th:text="${record.supporter2}"></span>
+			        <span th:if="${record.supporter2Level != null}">
+			            Lv.<span th:text="${record.supporter2Level}"></span>
+			        </span>
+			    </li>
+
+			    <li>
+			        <span th:text="${record.supporter3}"></span>
+			        <span th:if="${record.supporter3Level != null}">
+			            Lv.<span th:text="${record.supporter3Level}"></span>
+			        </span>
+			    </li>
+
+			    <li>
+			        <span th:text="${record.supporter4}"></span>
+			        <span th:if="${record.supporter4Level != null}">
+			            Lv.<span th:text="${record.supporter4Level}"></span>
+			        </span>
+			    </li>
+
+			    <li>
+			        <span th:text="${record.supporter5}"></span>
+			        <span th:if="${record.supporter5Level != null}">
+			            Lv.<span th:text="${record.supporter5Level}"></span>
+			        </span>
+			    </li>
+			</ol>
+
+        </div>
+
+
+        <div class="section">
+
+            <h3>シーンカード</h3>
+
+			<ol>
+			    <li>
+			        <span th:text="${record.sceneCard1}"></span>
+			        <span th:if="${record.sceneCard1Level != null}">
+			            Lv.<span th:text="${record.sceneCard1Level}"></span>
+			        </span>
+			    </li>
+
+			    <li>
+			        <span th:text="${record.sceneCard2}"></span>
+			        <span th:if="${record.sceneCard2Level != null}">
+			            Lv.<span th:text="${record.sceneCard2Level}"></span>
+			        </span>
+			    </li>
+
+			    <li>
+			        <span th:text="${record.sceneCard3}"></span>
+			        <span th:if="${record.sceneCard3Level != null}">
+			            Lv.<span th:text="${record.sceneCard3Level}"></span>
+			        </span>
+			    </li>
+			</ol>
+
+        </div>
+
+
+        <div class="section">
+
+            <h3>補助器具</h3>
+
+
+            <div class="equipment">
+
+                <strong>
+                    補助器具1：
+                    <span th:text="${record.equipment1}"></span>
+                </strong>
+
+                <ul>
+
+                    <li>
+                        <span th:text="${record.equipment1Sub1Name}"></span>
+                        ：
+                        <span th:text="${record.equipment1Sub1Value}"></span>
+                    </li>
+
+                    <li>
+                        <span th:text="${record.equipment1Sub2Name}"></span>
+                        ：
+                        <span th:text="${record.equipment1Sub2Value}"></span>
+                    </li>
+
+                    <li>
+                        <span th:text="${record.equipment1Sub3Name}"></span>
+                        ：
+                        <span th:text="${record.equipment1Sub3Value}"></span>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="equipment">
+
+                <strong>
+                    補助器具2：
+                    <span th:text="${record.equipment2}"></span>
+                </strong>
+
+                <ul>
+
+                    <li>
+                        <span th:text="${record.equipment2Sub1Name}"></span>
+                        ：
+                        <span th:text="${record.equipment2Sub1Value}"></span>
+                    </li>
+
+                    <li>
+                        <span th:text="${record.equipment2Sub2Name}"></span>
+                        ：
+                        <span th:text="${record.equipment2Sub2Value}"></span>
+                    </li>
+
+                    <li>
+                        <span th:text="${record.equipment2Sub3Name}"></span>
+                        ：
+                        <span th:text="${record.equipment2Sub3Value}"></span>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="equipment">
+
+                <strong>
+                    補助器具3：
+                    <span th:text="${record.equipment3}"></span>
+                </strong>
+
+                <ul>
+
+                    <li>
+                        <span th:text="${record.equipment3Sub1Name}"></span>
+                        ：
+                        <span th:text="${record.equipment3Sub1Value}"></span>
+                    </li>
+
+                    <li>
+                        <span th:text="${record.equipment3Sub2Name}"></span>
+                        ：
+                        <span th:text="${record.equipment3Sub2Value}"></span>
+                    </li>
+
+                    <li>
+                        <span th:text="${record.equipment3Sub3Name}"></span>
+                        ：
+                        <span th:text="${record.equipment3Sub3Value}"></span>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+		    <div class="section">
+		        <h3>戦力</h3>
+
+		        <div class="status-box">
+
+		            <div class="status-item">
+		                開始総戦力：
+		                <strong th:text="${record.startTotalStatus}"></strong>
+		            </div>
+
+		            <div class="status-item">
+		                終了総戦力：
+		                <strong th:text="${record.totalStatus}"></strong>
+		            </div>
+
+					<div class="status-item">
+					    純増加量：
+					    <strong
+					        class="gain-status"
+					        th:text="${record.gainTotalStatus}">
+					    </strong>
+					</div>
+		        </div>
+		    </div>
+
+
+		    <!-- コメントもこの中 -->
+		    <div class="section"
+		         th:if="${record.comment != null and !#strings.isEmpty(record.comment)}">
+
+		        <h3>コメント</h3>
+
+		        <p
+		            style="white-space: pre-wrap;"
+		            th:text="${record.comment}">
+		        </p>
+
+		    </div>
+
+		</div>
+
+    <p th:if="${#lists.isEmpty(records)}">
+        まだ育成記録がありません。
+    </p>
+
+</body>
+
+</html>

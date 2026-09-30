@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ja"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ホトギスラボ</title>
+	<style>
+	    body {
+	        font-family: sans-serif;
+	        max-width: 900px;
+	        margin: 30px auto;
+	        padding: 0 20px;
+	        line-height: 1.7;
+	    }
+
+	    h1, h2, h3, h4 {
+	        margin-top: 24px;
+	    }
+
+	    label {
+	        display: inline-block;
+	        margin: 5px 0;
+	    }
+
+	    select,
+	    input,
+	    textarea {
+	        padding: 6px 8px;
+	        margin-left: 6px;
+	    }
+
+	    textarea {
+	        width: 100%;
+	        max-width: 600px;
+	        box-sizing: border-box;
+	    }
+
+	    button {
+	        padding: 10px 24px;
+	        font-size: 16px;
+	        cursor: pointer;
+	    }
+
+	    hr {
+	        margin: 24px 0;
+	    }
+		.equipment-box {
+		    border: 1px solid #cccccc;
+		    border-radius: 8px;
+		    padding: 15px;
+		    margin: 15px 0;
+		}
+
+		.equipment-box h4 {
+		    margin-top: 0;
+		}
+		.section-box {
+		    border: 1px solid #dddddd;
+		    border-radius: 10px;
+		    padding: 18px;
+		    margin: 20px 0;
+		}
+
+		.section-box > h3 {
+		    margin-top: 0;
+		}
+		.submit-area {
+		    text-align: center;
+		    margin: 30px 0 50px;
+		}
+
+		.submit-area button {
+		    padding: 12px 50px;
+		    font-size: 18px;
+		    font-weight: bold;
+		    border-radius: 8px;
+		    cursor: pointer;
+		}
+		.success-message {
+		    border: 1px solid #8bc98b;
+		    background-color: #eef9ee;
+		    border-radius: 8px;
+		    padding: 10px 16px;
+		    margin: 15px 0 25px;
+		}
+
+		.success-message p {
+		    margin: 0;
+		    font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+
+    <h1>ホトギスラボ</h1>
+    <p>育成データ収集・分析サイト</p>
+	<p>個人製作やけん多少バグっても大目に見てね（笑）！</p>
+
+    <hr>
+
+    <h2>育成データ登録</h2>
+	<div
+	    class="success-message"
+	    th:if="${successMessage}">
+
+	    <p th:text="${successMessage}"></p>
+
+	</div>
+	<form action="/training-records" method="post">
+		<input
+		    type="hidden"
+		    th:name="${_csrf.parameterName}"
+		    th:value="${_csrf.token}">
+	    <input
+	        type="hidden"
+	        th:name="${_csrf.parameterName}"
+	        th:value="${_csrf.token}">
+
+	    <h3>投稿者</h3>
+        <label>
+            投稿者名
+            <input type="text" name="contributorName" required>
+        </label>
+
+		<div class="section-box">
+		<h3>キャラクター</h3>
+
+		<label>
+		    キャラクター名
+
+		    <select
+		        id="fighterName"
+		        name="fighterName"
+		        required>
+
+		        <option value="">
+		            選択してや
+		        </option>
+
+		        <option
+		            th:each="fighter : ${fighters}"
+		            th:value="${fighter}"
+		            th:text="${fighter}">
+		        </option>
+
+		    </select>
+			<label>
+			    レベル
+
+			    <select name="fighterLevel" required>
+			        <option value="">選択してください</option>
+
+			        <option
+			            th:each="level : ${#numbers.sequence(50, 100)}"
+			            th:value="${level}"
+			            th:text="${level}">
+			        </option>
+			    </select>
+			</label>
+
+		</label>
+		</div>
+		
+		
+		<div class="section-box">
+		<h3>サポーター編成</h3>
+
+		<label>
+		    サポーター1
+		    <select name="supporter1" id="supporter1" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="supporter : ${supporters}"
+		            th:value="${supporter}"
+		            th:text="${supporter}">
+		        </option>
+		    </select>
+		</label>
+
+		<label>
+		    レベル
+		    <select name="supporter1Level" required>
+		        <option value="">選択してください</option>
+
+		        <option
+		            th:each="level : ${#numbers.sequence(50, 100)}"
+		            th:value="${level}"
+		            th:text="${level}">
+		        </option>
+		    </select>
+		</label>
+
+		<br>
+
+		<label>
+		    サポーター2
+		    <select name="supporter2" id="supporter2" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="supporter : ${supporters}"
+		            th:value="${supporter}"
+		            th:text="${supporter}">
+		        </option>
+		    </select>
+		</label>
+
+		<label>
+		    レベル
+		    <select name="supporter2Level" required>
+		        <option value="">選択してください</option>
+
+		        <option
+		            th:each="level : ${#numbers.sequence(50, 100)}"
+		            th:value="${level}"
+		            th:text="${level}">
+		        </option>
+		    </select>
+		</label>
+
+		<br>
+		<label>
+		    サポーター3
+		    <select name="supporter3" id="supporter3" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="supporter : ${supporters}"
+		            th:value="${supporter}"
+		            th:text="${supporter}">
+		        </option>
+		    </select>
+		</label>
+
+		<label>
+		    レベル
+		    <select name="supporter3Level" required>
+		        <option value="">選択してください</option>
+
+		        <option
+		            th:each="level : ${#numbers.sequence(50, 100)}"
+		            th:value="${level}"
+		            th:text="${level}">
+		        </option>
+		    </select>
+		</label>
+
+		<br>
+
+		<label>
+		    サポーター4
+		    <select name="supporter4" id="supporter4" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="supporter : ${supporters}"
+		            th:value="${supporter}"
+		            th:text="${supporter}">
+		        </option>
+		    </select>
+		</label>
+
+		<label>
+		    レベル
+		    <select name="supporter4Level" required>
+		        <option value="">選択してください</option>
+
+		        <option
+		            th:each="level : ${#numbers.sequence(50, 100)}"
+		            th:value="${level}"
+		            th:text="${level}">
+		        </option>
+		    </select>
+		</label>
+		<br>
+		<label>
+		    サポーター5
+		    <select name="supporter5" id="supporter5" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="supporter : ${supporters}"
+		            th:value="${supporter}"
+		            th:text="${supporter}">
+		        </option>
+		    </select>
+		</label>
+
+		<label>
+		    レベル
+		    <select name="supporter5Level" required>
+		        <option value="">選択してください</option>
+
+		        <option
+		            th:each="level : ${#numbers.sequence(50, 100)}"
+		            th:value="${level}"
+		            th:text="${level}">
+		        </option>
+		    </select>
+		</label>
+		</div>
+		
+		<br>
+
+		<br>
+		
+		<div class="section-box">
+		<h3>シーンカード</h3>
+
+		<label>
+		    シーンカード1
+
+		   <select name="sceneCard1" id="sceneCard1" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="sceneCard : ${sceneCards}"
+		            th:value="${sceneCard}"
+		            th:text="${sceneCard}">
+		        </option>
+		    </select>
+		</label>
+
+		<label>
+		    レベル
+
+		    <select name="sceneCard1Level" required>
+		        <option value="">選択してください</option>
+
+		        <option
+		            th:each="level : ${#numbers.sequence(50, 100)}"
+		            th:value="${level}"
+		            th:text="${level}">
+		        </option>
+		    </select>
+		</label>
+
+		<br>
+
+
+		<label>
+		    シーンカード2
+
+		   <select name="sceneCard2" id="sceneCard2" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="sceneCard : ${sceneCards}"
+		            th:value="${sceneCard}"
+		            th:text="${sceneCard}">
+		        </option>
+		    </select>
+		</label>
+
+		<label>
+		    レベル
+
+		    <select name="sceneCard2Level" required>
+		        <option value="">選択してください</option>
+
+		        <option
+		            th:each="level : ${#numbers.sequence(50, 100)}"
+		            th:value="${level}"
+		            th:text="${level}">
+		        </option>
+		    </select>
+		</label>
+		
+
+		<br>
+
+
+		<label>
+		    シーンカード3
+
+		   <select name="sceneCard3" id="sceneCard3" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="sceneCard : ${sceneCards}"
+		            th:value="${sceneCard}"
+		            th:text="${sceneCard}">
+		        </option>
+		    </select>
+		</label>
+
+		<label>
+		    レベル
+
+		    <select name="sceneCard3Level" required>
+		        <option value="">選択してください</option>
+
+		        <option
+		            th:each="level : ${#numbers.sequence(50, 100)}"
+		            th:value="${level}"
+		            th:text="${level}">
+		        </option>
+		    </select>
+		</label>
+		</div>
+		
+		<div class="equipment-box">
+		<h3>補助器具</h3>
+
+		<!-- ==================== -->
+		<!-- 補助器具1 -->
+		<!-- ==================== -->
+		
+		<h4>補助器具1</h4>
+
+		<label>
+		    補助器具名
+
+		    <select name="equipment1" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="equipment : ${equipments}"
+		            th:value="${equipment}"
+		            th:text="${equipment}">
+		        </option>
+		    </select>
+		</label>
+
+		<br><br>
+
+		<label>
+		    サブ能力1
+
+		    <select name="equipment1Sub1Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment1Sub1Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+
+		<br>
+
+		<label>
+		    サブ能力2
+
+		    <select name="equipment1Sub2Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment1Sub2Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+
+		<br>
+
+		<label>
+		    サブ能力3
+
+		    <select name="equipment1Sub3Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment1Sub3Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+
+		</div>
+		
+		<div class="equipment-box">
+		<!-- ==================== -->
+		<!-- 補助器具2 -->
+		<!-- ==================== -->
+
+		<h4>補助器具2</h4>
+
+		<label>
+		    補助器具名
+
+		    <select name="equipment2" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="equipment : ${equipments}"
+		            th:value="${equipment}"
+		            th:text="${equipment}">
+		        </option>
+		    </select>
+		</label>
+
+		<br><br>
+
+		<label>
+		    サブ能力1
+
+		    <select name="equipment2Sub1Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment2Sub1Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+
+		<br>
+
+		<label>
+		    サブ能力2
+
+		    <select name="equipment2Sub2Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment2Sub2Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+
+		<br>
+
+		<label>
+		    サブ能力3
+
+		    <select name="equipment2Sub3Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment2Sub3Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+		</div>
+		
+		<div class="equipment-box">
+		<!-- ==================== -->
+		<!-- 補助器具3 -->
+		<!-- ==================== -->
+
+		<h4>補助器具3</h4>
+
+		<label>
+		    補助器具名
+
+		    <select name="equipment3" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="equipment : ${equipments}"
+		            th:value="${equipment}"
+		            th:text="${equipment}">
+		        </option>
+		    </select>
+		</label>
+
+		<br><br>
+
+		<label>
+		    サブ能力1
+
+		    <select name="equipment3Sub1Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment3Sub1Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+
+		<br>
+
+		<label>
+		    サブ能力2
+
+		    <select name="equipment3Sub2Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment3Sub2Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+
+		<br>
+
+		<label>
+		    サブ能力3
+
+		    <select name="equipment3Sub3Name" required>
+		        <option value="">選択してや</option>
+
+		        <option
+		            th:each="subAbility : ${subAbilities}"
+		            th:value="${subAbility}"
+		            th:text="${subAbility}">
+		        </option>
+		    </select>
+
+		    <input
+		        type="number"
+		        name="equipment3Sub3Value"
+		        placeholder="値"
+		        step="any"
+		        required
+		    >
+		</label>
+		</div>
+		<br><br>
+
+	<div class="section-box">
+		<h3>育成開始時ステータス</h3>
+
+		<label>
+		    筋力
+		    <input
+		        type="number"
+		        id="startStrength"
+		        name="startStrength"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    体力
+		    <input
+		        type="number"
+		        id="startStamina"
+		        name="startStamina"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    技術
+		    <input
+		        type="number"
+		        id="startTechnique"
+		        name="startTechnique"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    タフネス
+		    <input
+		        type="number"
+		        id="startToughness"
+		        name="startToughness"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    俊敏性
+		    <input
+		        type="number"
+		        id="startAgility"
+		        name="startAgility"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    精神力
+		    <input
+		        type="number"
+		        id="startMental"
+		        name="startMental"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br><br>
+
+		    <label>
+		        開始時総戦力
+		        <input
+		            type="number"
+		            id="startTotal"
+		            readonly>
+		    </label>
+
+		</div>
+
+		<div class="section-box">
+		<h3>育成終了時ステータス</h3>
+
+		<label>
+		    筋力
+		    <input
+		        type="number"
+		        id="endStrength"
+		        name="strength"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    体力
+		    <input
+		        type="number"
+		        id="endStamina"
+		        name="stamina"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    技術
+		    <input
+		        type="number"
+		        id="endTechnique"
+		        name="technique"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    タフネス
+		    <input
+		        type="number"
+		        id="endToughness"
+		        name="toughness"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    俊敏性
+		    <input
+		        type="number"
+		        id="endAgility"
+		        name="agility"
+		        min="0"
+		        required
+		    >
+		</label>
+		<br>
+
+		<label>
+		    精神力
+		    <input
+		        type="number"
+		        id="endMental"
+		        name="mental"
+		        min="0"
+		        required
+		    >
+		</label>
+
+		<br><br>
+
+		<div class="section-box">
+		<label>
+		    終了時総戦力
+		    <input
+		        type="number"
+		        id="endTotal"
+		        readonly
+		    >
+		</label>
+		</div>
+		<div class="section-box">
+			<h3>自由コメント</h3>
+
+			<label>
+			    育成についてのコメント<br>
+
+			    <textarea
+			        name="comment"
+			        rows="5"
+			        cols="50"
+			        maxlength="500"
+			        placeholder="育成時に気付いたことなど自由に書いてください">
+			    </textarea>
+			</label>
+
+			<p>
+			    ※500文字まで・未入力でもOK
+			</p>
+			</div>
+		
+        <br><br>
+
+		<div class="submit-area">
+		    <button type="submit">
+		        育成データを登録ッッ
+		    </button>
+		</div>
+
+    </form>
+
+
+    <script>
+
+        function getValue(id) {
+
+            const value =
+                document.getElementById(id).value;
+
+            if (value === "") {
+                return 0;
+            }
+
+            return Number(value);
+        }
+
+
+        function updateTotals() {
+
+            const startTotal =
+                getValue("startStrength")
+                + getValue("startStamina")
+                + getValue("startTechnique")
+                + getValue("startToughness")
+                + getValue("startAgility")
+                + getValue("startMental");
+
+            document.getElementById(
+                "startTotal"
+            ).value = startTotal;
+
+
+            const endTotal =
+                getValue("endStrength")
+                + getValue("endStamina")
+                + getValue("endTechnique")
+                + getValue("endToughness")
+                + getValue("endAgility")
+                + getValue("endMental");
+
+            document.getElementById(
+                "endTotal"
+            ).value = endTotal;
+        }
+
+
+        const statusFields = [
+
+            "startStrength",
+            "startStamina",
+            "startTechnique",
+            "startToughness",
+            "startAgility",
+            "startMental",
+
+            "endStrength",
+            "endStamina",
+            "endTechnique",
+            "endToughness",
+            "endAgility",
+            "endMental"
+
+        ];
+
+
+        statusFields.forEach(function(id) {
+
+            document.getElementById(id)
+                .addEventListener(
+                    "input",
+                    updateTotals
+                );
+
+        });
+
+    </script>
+
+	<script>
+
+	    document.querySelector("form")
+	        .addEventListener("submit", function(event) {
+
+	            const fighter =
+	                document.getElementById("fighterName").value;
+
+	            const supporters = [
+	                document.getElementById("supporter1").value,
+	                document.getElementById("supporter2").value,
+	                document.getElementById("supporter3").value,
+	                document.getElementById("supporter4").value,
+	                document.getElementById("supporter5").value
+	            ];
+
+	            // 育成キャラとサポーターの重複
+	            if (supporters.includes(fighter)) {
+
+	                event.preventDefault();
+
+	                alert(
+	                    "育成キャラクターと同じキャラクターを" +
+	                    "サポーターには選択できんね。"
+	                );
+
+	                return;
+	            }
+
+	            // サポーター同士の重複
+	            const uniqueSupporters =
+	                new Set(supporters);
+
+	            if (uniqueSupporters.size !== supporters.length) {
+
+	                event.preventDefault();
+
+	                alert(
+	                    "同じサポーターを複数選択することはできんね。"
+	                );
+
+	                return;
+	            }
+				// ================================
+				// シーンカード3枚の重複チェック
+				// ================================
+
+				const sceneCards = [
+				    document.getElementById("sceneCard1").value,
+				    document.getElementById("sceneCard2").value,
+				    document.getElementById("sceneCard3").value
+				];
+
+				const uniqueSceneCards =
+				    new Set(sceneCards);
+
+				if (uniqueSceneCards.size !== sceneCards.length) {
+
+				    event.preventDefault();
+
+				    alert(
+				        "同じシーンカードを複数選択することはできんね。"
+				    );
+
+				    return;
+				}
+				
+	        });
+
+	</script>
+	
+	<script>
+
+	    // ========================================
+	    // サブ能力ごとの入力可能範囲
+	    // ========================================
+
+	    function getSubAbilityRange(name) {
+
+	        if (name === "極意継承発生率") {
+	            return { min: 3, max: 12 };
+	        }
+
+	        if (name === "戦闘ボーナス") {
+	            return { min: 5, max: 20 };
+	        }
+
+	        if (name === "究極鍛錬率") {
+	            return { min: 5, max: 20 };
+	        }
+
+	        if (name.startsWith("常時")
+	                && name.endsWith("獲得量上昇")) {
+
+	            return { min: 5, max: 25 };
+	        }
+
+	        if (name.includes("究極鍛錬率上昇")) {
+	            return { min: 36, max: 90 };
+	        }
+
+	        if (name.includes("エクストラボーナス1段階")) {
+	            return { min: 12, max: 50 };
+	        }
+
+	        if (name.includes("エクストラボーナス2段階")) {
+	            return { min: 15, max: 25 };
+	        }
+
+	        if (name.includes("闘気覚醒発生率上昇")) {
+	            return { min: 5, max: 15 };
+	        }
+
+	        if (name.endsWith("固定ボーナス")) {
+	            return { min: 10, max: 30 };
+	        }
+
+	        // 「極技 ○○」は今のところ数値制限なし
+	        if (name.startsWith("極技 ")) {
+	            return null;
+	        }
+
+	        return null;
+	    }
+
+
+	    // ========================================
+	    // 9個のサブ能力欄をまとめて設定
+	    // ========================================
+
+	    const subAbilityFields = [
+
+	        "equipment1Sub1",
+	        "equipment1Sub2",
+	        "equipment1Sub3",
+
+	        "equipment2Sub1",
+	        "equipment2Sub2",
+	        "equipment2Sub3",
+
+	        "equipment3Sub1",
+	        "equipment3Sub2",
+	        "equipment3Sub3"
+
+	    ];
+
+
+	    subAbilityFields.forEach(function(fieldName) {
+
+	        const select =
+	            document.querySelector(
+	                '[name="' + fieldName + 'Name"]'
+	            );
+
+	        const input =
+	            document.querySelector(
+	                '[name="' + fieldName + 'Value"]'
+	            );
+
+
+				select.addEventListener("change", function() {
+
+				    // ========================================
+				    // 極技
+				    // ========================================
+
+				    if (select.value.startsWith("極技 ")) {
+
+				        // DBには0を保存する
+				        input.value = 0;
+
+				        // 手入力できないようにする
+				        input.readOnly = true;
+
+				        // 通常能力用の範囲指定を解除
+				        input.removeAttribute("min");
+				        input.removeAttribute("max");
+
+				        input.placeholder = "確定付与";
+
+				        return;
+				    }
+
+
+				    // ========================================
+				    // 極技以外
+				    // ========================================
+
+				    input.readOnly = false;
+
+				    const range =
+				        getSubAbilityRange(select.value);
+
+
+				    // 範囲設定がない能力
+				    if (range === null) {
+
+				        input.removeAttribute("min");
+				        input.removeAttribute("max");
+
+				        input.placeholder = "値";
+
+				        return;
+				    }
+
+
+				    // ========================================
+				    // 最小値・最大値を設定
+				    // ========================================
+
+				    input.min = range.min;
+				    input.max = range.max;
+
+				    input.placeholder =
+				        range.min + "～" + range.max;
+
+
+				    // ========================================
+				    // 現在の値が範囲外なら消す
+				    // ========================================
+
+				    if (input.value !== "") {
+
+				        const value = Number(input.value);
+
+				        if (value < range.min
+				                || value > range.max) {
+
+				            input.value = "";
+				        }
+				    }
+
+				});
+				
+
+	    });
+
+	</script>
+	
+	
+	
+	<br>
+</body>
+</html>
